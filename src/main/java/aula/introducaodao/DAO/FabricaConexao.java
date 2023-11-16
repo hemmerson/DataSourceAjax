@@ -8,7 +8,7 @@ public class FabricaConexao {
     public static Connection pegaConexao() throws ErroDAO{
         try {
             Class.forName("org.postgresql.Driver");
-            return DriverManager.getConnection("jdbc:postgresql://localhost/aula","aluno","aluno");
+            return DriverManager.getConnection("jdbc:postgresql://localhost/aula","postgres","admin");
         } catch (ClassNotFoundException | SQLException e) {
             throw new ErroDAO("Erro na Fabrica de conexão: "+e);
         }

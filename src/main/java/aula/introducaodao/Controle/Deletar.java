@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 @WebServlet("/deletar")
 public class Deletar extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");

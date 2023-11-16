@@ -15,19 +15,7 @@ function ajax(recurso,dados,funcao,metodo)
 }
 onload=()=>
 {
-    document.getElementById("btCadastrar").onclick=(evento)=>{
-        evento.preventDefault();
-        const nome=document.getElementById("nome").value;
-        const idade=document.getElementById("idade").value;
-        dados=`nome=${nome}&idade=${idade}`;
-        ajax("inserir",dados,function (){
-            if(this.readyState==4 && this.status==200)
-            {
-                buscaPessoas();
-                alert(this.responseText);
-            }
-        },"post");
-    }
+    limpaCampos();
     buscaPessoas();
 }
 function buscaPessoas(){
@@ -45,14 +33,74 @@ function mostrarDados(doc)
     for(let p of pessoas)
     {
 
-        const id=p.getElementsByTagName("id")[0].textContent;
+        const id= p.getElementsByTagName("id")[0].textContent;
+        const nome = p.getElementsByTagName("nome")[0].textContent
+        const idade = p.getElementsByTagName("idade")[0].textContent
         texto+=`<tr>
                 <td>${id}</td>
-                <td>${p.getElementsByTagName("nome")[0].textContent}</td>
-                <td>${p.getElementsByTagName("idade")[0].textContent}</td>
-                <td><a href="deletar?id=${id}">Deletar</a></td>
-                <td><a href="editar?id=${id}">Editar</a></td>
+                <td>${nome}</td>
+                <td>${idade}</td>
+                <td><button onclick="deletar(${id})">Deletar</button></td>
+                <td><button onclick="preencheEditar(${id}, '${nome}', ${idade})">Editar</button></td>
            </tr>`;
     }
     document.querySelector("tbody").innerHTML=texto;
+}
+
+function deletar(id){
+    dados=`id=${id}`;
+    ajax("deletar",dados,function (){
+        if(this.readyState==4 && this.status==200)
+        {
+            buscaPessoas();
+            alert(this.responseText);
+        }
+    },"get");
+}
+
+function preencheEditar(id,nome,idade){
+    document.getElementById('id').value = id;
+    document.getElementById('nome').value = nome;
+    document.getElementById('idade').value = idade;
+    document.getElementById("btCadastrar").value = "Editar";
+    editar();
+}
+
+function editar(){
+    document.getElementById("btCadastrar").onclick=(evento)=>{
+        evento.preventDefault();
+        const id = document.getElementById("id").value;
+        const nome=document.getElementById("nome").value;
+        const idade=document.getElementById("idade").value;
+        dados=`id=${id}&nome=${nome}&idade=${idade}`;
+        ajax("editar",dados,function (){
+            if(this.readyState==4 && this.status==200)
+            {
+                buscaPessoas();
+                alert(this.responseText);
+            }
+        },"post");
+        limpaCampos();
+    }
+}
+
+function limpaCampos(){
+    document.getElementById("id").value = "";
+    document.getElementById("nome").value = "";
+    document.getElementById("idade").value = "";
+    document.getElementById("btCadastrar").value = "Cadastrar";
+    document.getElementById("btCadastrar").onclick=(evento)=>{
+        evento.preventDefault();
+        const nome=document.getElementById("nome").value;
+        const idade=document.getElementById("idade").value;
+        dados=`nome=${nome}&idade=${idade}`;
+        ajax("inserir",dados,function (){
+            if(this.readyState==4 && this.status==200)
+            {
+                buscaPessoas();
+                alert(this.responseText);
+            }
+        },"post");
+        limpaCampos();
+    }
 }
